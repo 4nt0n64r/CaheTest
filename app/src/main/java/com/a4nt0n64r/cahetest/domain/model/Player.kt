@@ -19,6 +19,10 @@ data class Player(
 data class CloudPlayer(
     @SerializedName("player")
     val player: Player
-)
+){
+    override fun toString(): String {
+        return "Name = ${player.name}, data = ${player.data}"
+    }
+}
 
 

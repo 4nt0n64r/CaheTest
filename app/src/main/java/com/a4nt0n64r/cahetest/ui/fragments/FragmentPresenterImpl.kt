@@ -1,5 +1,7 @@
 package com.a4nt0n64r.cahetest.ui.fragments
 
+import androidx.annotation.WorkerThread
+import com.a4nt0n64r.cahetest.domain.model.CloudPlayer
 import com.a4nt0n64r.cahetest.domain.model.Player
 import com.a4nt0n64r.cahetest.domain.repository.Repository
 import com.a4nt0n64r.cahetest.network.NetworkRepository
@@ -14,11 +16,13 @@ class FragmentPresenterImpl(
     private val cloudRepository: NetworkRepository
 ) : AbstractFragmentPresenter() {
 
-    private var job: Job? = null
+    private lateinit var cloudPlayer: CloudPlayer
+
+    private val job: Job by lazy { SupervisorJob() }
 
     override fun onDeleteButtonWasClicked(name: String) {
         if (name != "") {
-            job = CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(Dispatchers.Main + job).launch {
                 val player: Player? = repository.findPlayer(name)
                 if (player != null) {
                     repository.deletePlayer(name)
@@ -30,21 +34,21 @@ class FragmentPresenterImpl(
                 }
             }
         } else {
-            job = CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.Main + job).launch {
                 viewState.showSnackbar("Empty delete request!")
             }
         }
     }
 
     override fun onSaveButtonWasClicked(name: String, data: String) {
-        job = CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Main + job).launch {
             if (name != "" && data != "") {
                 repository.savePlayer(Player(name, data))
                 withContext(Dispatchers.Main) {
                     viewState.showSnackbar("save ${name} ${data}")
                 }
             } else {
-                job = CoroutineScope(Dispatchers.Main).launch {
+                CoroutineScope(Dispatchers.Main + job).launch {
                     viewState.showSnackbar("Enter data and name!")
                 }
             }
@@ -56,7 +60,7 @@ class FragmentPresenterImpl(
             val player: Deferred<Player>? = CoroutineScope(Dispatchers.IO).async {
                 repository.findPlayer(name)
             }
-            job = CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(Dispatchers.Main + job).launch {
                 if (player != null) {
                     viewState.showSnackbar("find ${player.await()}")
                     viewState.fillName(player.await().name)
@@ -66,15 +70,17 @@ class FragmentPresenterImpl(
                 }
             }
         } else {
-            job = CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.Main + job).launch {
                 viewState.showSnackbar("Empty find request!")
             }
         }
     }
 
     override fun onShowButtonWasClicked() {
-        job = CoroutineScope(Dispatchers.IO).launch {
-            val players: List<Player>? = repository.getAllPlayers()
+        CoroutineScope(Dispatchers.Main + job).launch {
+            val players: List<Player>? = withContext(Dispatchers.IO) {
+                repository.getAllPlayers()
+            }
             if (!players.isNullOrEmpty()) {
                 withContext(Dispatchers.Main) { viewState.showSnackbar("show all") }
                 var names = ""
@@ -91,24 +97,34 @@ class FragmentPresenterImpl(
         }
     }
 
+
     override fun onNetButtonWasClicked() {
-        job = CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Main + job).launch {
 
-            var name: String
-            var data: String
-
-            cloudRepository.getPlayer { responce ->
-                name = responce.player.name
-                data = responce.player.data
-                val cloudPlayer = Player(name, data)
-                CoroutineScope(Dispatchers.Main).launch { viewState.showSnackbar(cloudPlayer.toString()) }
+            cloudPlayer = withContext(Dispatchers.IO) {
+                getCloudPlayer()
             }
+
+            viewState.showSnackbar(cloudPlayer.toString())
         }
+
+    }
+
+    @WorkerThread
+    private suspend fun getCloudPlayer(): CloudPlayer {
+
+        try {
+            val cloudPlayer = cloudRepository.getPlayer()
+            return cloudPlayer!!
+        } catch (e: NullPointerException) {
+            viewState.showSnackbar("Данные не пришли!")
+        }
+
+        return CloudPlayer(Player("Пусто", "Пусто"))
     }
 
     override fun onDestroy() {
-        if (job != null) {
-            job!!.cancel()
-        }
+
+        job.cancel()
     }
 }
