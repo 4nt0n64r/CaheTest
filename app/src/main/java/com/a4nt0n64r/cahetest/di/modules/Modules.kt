@@ -1,6 +1,6 @@
 package com.a4nt0n64r.cahetest.di.modules
 
-import android.arch.persistence.room.Room
+import androidx.room.Room
 import com.a4nt0n64r.cahetest.BuildConfig
 import com.a4nt0n64r.cahetest.data.repository.NetworkRepoImpl
 import com.a4nt0n64r.cahetest.data.repository.RepoImpl
@@ -18,7 +18,7 @@ import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
-import org.koin.dsl.module.module
+import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -35,41 +35,41 @@ const val API_SERVICE = "api_service"
 
 val applicationModules = module(override = true) {
 
-//    presenters
+    //    presenters
     factory<AbstractActivityPresenter> {
         ActivityPresenterImpl()
     }
 
     factory<AbstractFragmentPresenter> {
         FragmentPresenterImpl(
-            get(REPOSITORY),
-            get(CLOUD_REPOSITORY)
+            get(),
+            get()
         )
     }
 
 //    repository
-    factory<Repository>(REPOSITORY) { RepoImpl(get(DAO)) }
+    factory<Repository> { RepoImpl(get()) }
 
 //    database
-    single<MyDatabase>(DATABASE) {
+    single{
         Room
             .databaseBuilder(
                 androidContext(), MyDatabase::class.java, MyDatabase.DB_NAME
             ).build()
     }
-    single<PlayerDao>(DAO) { get<MyDatabase>().playerDao() }
+    single<PlayerDao> { get<MyDatabase>().playerDao() }
 
 //    network
-    single<HttpLoggingInterceptor>(INTERCEPTOR) { provideInterceptor() }
-    single<Gson>(GSON) { provideGson() }
-    single<OkHttpClient>(OK_HTTP_CLIENT) { provideDefaultOkhttpClient(get(INTERCEPTOR)) }
-    single<Retrofit>(RETROFIT) { provideRetrofit(get(GSON),get(OK_HTTP_CLIENT)) }
-    single<ApiService>(API_SERVICE) { provideApiService(get(RETROFIT)) }
-    factory<NetworkRepository>(CLOUD_REPOSITORY) { NetworkRepoImpl(get(API_SERVICE)) }
+    single { provideInterceptor() }
+    single { provideGson() }
+    single { provideDefaultOkhttpClient(get()) }
+    single { provideRetrofit(get(), get()) }
+    single { provideApiService(get()) }
+    factory<NetworkRepository> { NetworkRepoImpl(get()) }
 
 }
 
-fun provideGson():Gson{
+fun provideGson(): Gson {
     val gsonBuilder = GsonBuilder()
     return gsonBuilder.create()
 }
@@ -91,7 +91,7 @@ fun provideDefaultOkhttpClient(interceptor: HttpLoggingInterceptor): OkHttpClien
         .build()
 }
 
-fun provideRetrofit(gson:Gson, client: OkHttpClient): Retrofit {
+fun provideRetrofit(gson: Gson, client: OkHttpClient): Retrofit {
     return Retrofit.Builder()
         .baseUrl("https://raw.githubusercontent.com/4nt0n64r/CaheTest/master/")
         .client(client)

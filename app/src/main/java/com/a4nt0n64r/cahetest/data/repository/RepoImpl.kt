@@ -4,7 +4,7 @@ import com.a4nt0n64r.cahetest.data.source.db.PlayerDao
 import com.a4nt0n64r.cahetest.domain.model.Player
 import com.a4nt0n64r.cahetest.domain.repository.Repository
 
-class RepoImpl (private val dao: PlayerDao): Repository {
+class RepoImpl(private val dao: PlayerDao) : Repository {
 
     override suspend fun deletePlayer(name: String) {
         dao.deleteByName(name)

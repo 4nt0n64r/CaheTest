@@ -1,19 +1,19 @@
 package com.a4nt0n64r.cahetest.ui.fragments
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.a4nt0n64r.cahetest.R
 import com.a4nt0n64r.cahetest.ui.base.AbstractFragmentPresenter
 import com.a4nt0n64r.cahetest.ui.base.FragmentView
-import com.arellomobile.mvp.MvpAppCompatFragment
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
-import kotlinx.android.synthetic.main.activity_main.*
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_first.*
+import moxy.MvpAppCompatFragment
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import org.koin.android.ext.android.get
+
 
 class FirstFragment : MvpAppCompatFragment(), FragmentView {
 

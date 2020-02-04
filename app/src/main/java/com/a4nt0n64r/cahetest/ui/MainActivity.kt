@@ -6,11 +6,10 @@ import com.a4nt0n64r.cahetest.R
 import com.a4nt0n64r.cahetest.ui.base.AbstractActivityPresenter
 import com.a4nt0n64r.cahetest.ui.base.ActivityView
 import com.a4nt0n64r.cahetest.ui.fragments.FirstFragment
-import com.arellomobile.mvp.MvpAppCompatActivity
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
+import moxy.MvpAppCompatActivity
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import org.koin.android.ext.android.get
-
 
 const val FIRST_FRAGMENT = 0
 const val FRAGMENT_CHANGED = "fragment_changed"

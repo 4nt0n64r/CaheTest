@@ -2,16 +2,15 @@ package com.a4nt0n64r.cahetest.data.repository
 
 import android.util.Log
 import com.a4nt0n64r.cahetest.domain.model.CloudPlayer
-import com.a4nt0n64r.cahetest.domain.model.Player
 import com.a4nt0n64r.cahetest.network.ApiService
 import com.a4nt0n64r.cahetest.network.NetworkRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class NetworkRepoImpl(private val apiService: ApiService) :NetworkRepository{
+class NetworkRepoImpl(private val apiService: ApiService) : NetworkRepository {
 
-    override fun getPlayer(callback: (CloudPlayer) -> Unit){
+    override fun getPlayer(callback: (CloudPlayer) -> Unit) {
         val call = apiService.getPlayerFromCloud()
 
         call.enqueue(object : Callback<CloudPlayer> {

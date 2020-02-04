@@ -1,12 +1,11 @@
 package com.a4nt0n64r.cahetest.data.source.db
 
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.Room
-import android.arch.persistence.room.RoomDatabase
-import android.content.Context
+import androidx.room.Database
+import androidx.room.RoomDatabase
 import com.a4nt0n64r.cahetest.domain.model.Player
 
-@Database(entities = [Player::class],
+@Database(
+    entities = [Player::class],
     version = MyDatabase.VERSION,
     exportSchema = false
 )
@@ -18,10 +17,5 @@ abstract class MyDatabase : RoomDatabase() {
     }
 
     abstract fun playerDao(): PlayerDao
-
-    fun createDatabase(context: Context) {
-        Room.databaseBuilder(context.applicationContext, MyDatabase::class.java, MyDatabase.DB_NAME)
-            .build()
-    }
 }
 

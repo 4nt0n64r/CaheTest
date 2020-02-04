@@ -4,8 +4,9 @@ import com.a4nt0n64r.cahetest.domain.model.Player
 import com.a4nt0n64r.cahetest.domain.repository.Repository
 import com.a4nt0n64r.cahetest.network.NetworkRepository
 import com.a4nt0n64r.cahetest.ui.base.AbstractFragmentPresenter
-import com.arellomobile.mvp.InjectViewState
 import kotlinx.coroutines.*
+import moxy.InjectViewState
+
 
 @InjectViewState
 class FragmentPresenterImpl(
@@ -44,7 +45,7 @@ class FragmentPresenterImpl(
                 }
             } else {
                 job = CoroutineScope(Dispatchers.Main).launch {
-                    viewState.showSnackbar("Empty find request!")
+                    viewState.showSnackbar("Enter data and name!")
                 }
             }
         }

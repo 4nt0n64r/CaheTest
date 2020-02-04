@@ -1,6 +1,7 @@
 package com.a4nt0n64r.cahetest.ui.base
 
-import com.arellomobile.mvp.MvpPresenter
+import moxy.MvpPresenter
+
 
 //Тут описаны события которые могут происходить (нажата кнопка, выделен элемент...)
 interface ActivityPresenter {
@@ -24,4 +25,4 @@ interface FragmentPresenter {
 }
 
 abstract class AbstractActivityPresenter : MvpPresenter<ActivityView>(), ActivityPresenter
-abstract class AbstractFragmentPresenter : MvpPresenter<FragmentView>(),FragmentPresenter
+abstract class AbstractFragmentPresenter : MvpPresenter<FragmentView>(), FragmentPresenter
