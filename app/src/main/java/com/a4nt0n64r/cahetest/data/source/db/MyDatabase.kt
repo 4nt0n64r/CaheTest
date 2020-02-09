@@ -2,10 +2,10 @@ package com.a4nt0n64r.cahetest.data.source.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.a4nt0n64r.cahetest.domain.model.Player
+import com.a4nt0n64r.cahetest.domain.model.Person
 
 @Database(
-    entities = [Player::class],
+    entities = [Person::class],
     version = MyDatabase.VERSION,
     exportSchema = false
 )

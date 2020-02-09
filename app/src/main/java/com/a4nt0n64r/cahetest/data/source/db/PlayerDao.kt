@@ -4,21 +4,21 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.a4nt0n64r.cahetest.domain.model.Player
+import com.a4nt0n64r.cahetest.domain.model.Person
 
 @Dao
 interface PlayerDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun savePlayer(player: Player)
+    fun savePlayer(person: Person)
 
     @Query("DELETE FROM players WHERE name_field = :name")
     fun deleteByName(name: String)
 
     @Query("SELECT name_field,data_field FROM players")
-    fun selectAll(): List<Player>
+    fun selectAll(): List<Person>
 
     @Query("SELECT name_field,data_field FROM players WHERE name_field = :name")
-    fun findByName(name: String): Player
+    fun findByName(name: String): Person
 
 }

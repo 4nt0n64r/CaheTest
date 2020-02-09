@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.a4nt0n64r.cahetest.R
+import com.a4nt0n64r.cahetest.domain.model.Person
 import com.a4nt0n64r.cahetest.ui.base.AbstractFragmentPresenter
 import com.a4nt0n64r.cahetest.ui.base.FragmentView
 import com.google.android.material.snackbar.Snackbar
@@ -42,7 +43,12 @@ class FirstFragment : MvpAppCompatFragment(), FragmentView {
         }
 
         save.setOnClickListener {
-            presenter.onSaveButtonWasClicked(name_tv.text.toString(), data_tv.text.toString())
+            presenter.onSaveButtonWasClicked(
+                Person(
+                    name_tv.text.toString(),
+                    data_tv.text.toString()
+                )
+            )
         }
 
         delete.setOnClickListener {

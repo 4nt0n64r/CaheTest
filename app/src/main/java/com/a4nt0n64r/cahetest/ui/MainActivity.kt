@@ -1,7 +1,6 @@
 package com.a4nt0n64r.cahetest.ui
 
 import android.os.Bundle
-import android.util.Log
 import com.a4nt0n64r.cahetest.R
 import com.a4nt0n64r.cahetest.ui.base.AbstractActivityPresenter
 import com.a4nt0n64r.cahetest.ui.base.ActivityView
@@ -17,8 +16,6 @@ const val FRAGMENT_CHANGED = "fragment_changed"
 
 class MainActivity : MvpAppCompatActivity(), ActivityView {
 
-    private val TAG = "MainActivity"
-
     @InjectPresenter
     lateinit var presenter: AbstractActivityPresenter
 
@@ -33,28 +30,25 @@ class MainActivity : MvpAppCompatActivity(), ActivityView {
 
     }
 
-    override fun changeFragment(fragmentId: Int) {
+    override fun showFragment(fragmentId: Int) {
         when (fragmentId) {
             FIRST_FRAGMENT -> {
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.frame, FirstFragment(), FRAGMENT_CHANGED)
-                    .commit()
+                setUpFirstFragment()
             }
 
         }
     }
 
-    //Вызываем у ActivityPresenter метод onDestroy, чтобы избежать утечек контекста и прочих неприятностей.
+    private fun setUpFirstFragment() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.frame, FirstFragment(), FRAGMENT_CHANGED)
+            .commit()
+    }
+
     public override fun onDestroy() {
         super.onDestroy()
         presenter.onDestroy()
-        Log.d(TAG, "onDestroy()")
     }
 
 }
-
-
-
-
-

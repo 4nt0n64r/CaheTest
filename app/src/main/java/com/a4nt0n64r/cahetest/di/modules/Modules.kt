@@ -51,7 +51,7 @@ val applicationModules = module(override = true) {
     factory<Repository> { RepoImpl(get()) }
 
 //    database
-    single{
+    single {
         Room
             .databaseBuilder(
                 androidContext(), MyDatabase::class.java, MyDatabase.DB_NAME

@@ -8,7 +8,7 @@ import moxy.viewstate.strategy.StateStrategyType
 //функции вьюх. Всё что написано тут - то и может нарисовать вьюха, больше ничего.
 @StateStrategyType(SingleStateStrategy::class)
 interface ActivityView : MvpView {
-    fun changeFragment(fragmentId: Int)
+    fun showFragment(fragmentId: Int)
 }
 
 @StateStrategyType(SingleStateStrategy::class)

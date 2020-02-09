@@ -2,7 +2,7 @@ package com.a4nt0n64r.cahetest.ui.fragments
 
 import androidx.annotation.WorkerThread
 import com.a4nt0n64r.cahetest.domain.model.CloudPlayer
-import com.a4nt0n64r.cahetest.domain.model.Player
+import com.a4nt0n64r.cahetest.domain.model.Person
 import com.a4nt0n64r.cahetest.domain.repository.Repository
 import com.a4nt0n64r.cahetest.network.NetworkRepository
 import com.a4nt0n64r.cahetest.ui.base.AbstractFragmentPresenter
@@ -23,8 +23,8 @@ class FragmentPresenterImpl(
     override fun onDeleteButtonWasClicked(name: String) {
         if (name != "") {
             CoroutineScope(Dispatchers.Main + job).launch {
-                val player: Player? = repository.findPlayer(name)
-                if (player != null) {
+                val person: Person? = repository.findPlayer(name)
+                if (person != null) {
                     repository.deletePlayer(name)
                     withContext(Dispatchers.Main) {
                         viewState.showSnackbar("deleted $name")
@@ -40,12 +40,12 @@ class FragmentPresenterImpl(
         }
     }
 
-    override fun onSaveButtonWasClicked(name: String, data: String) {
+    override fun onSaveButtonWasClicked(person: Person) {
         CoroutineScope(Dispatchers.Main + job).launch {
-            if (name != "" && data != "") {
-                repository.savePlayer(Player(name, data))
+            if (person.name != "" && person.data != "") {
+                repository.savePlayer(Person(person.name, person.data))
                 withContext(Dispatchers.Main) {
-                    viewState.showSnackbar("save ${name} ${data}")
+                    viewState.showSnackbar("save ${person.name} ${person.data}")
                 }
             } else {
                 CoroutineScope(Dispatchers.Main + job).launch {
@@ -57,14 +57,14 @@ class FragmentPresenterImpl(
 
     override fun onFindButtonWasClicked(name: String) {
         if (name != "") {
-            val player: Deferred<Player>? = CoroutineScope(Dispatchers.IO).async {
+            val person: Deferred<Person>? = CoroutineScope(Dispatchers.IO).async {
                 repository.findPlayer(name)
             }
             CoroutineScope(Dispatchers.Main + job).launch {
-                if (player != null) {
-                    viewState.showSnackbar("find ${player.await()}")
-                    viewState.fillName(player.await().name)
-                    viewState.fillData(player.await().data)
+                if (person != null) {
+                    viewState.showSnackbar("find ${person.await()}")
+                    viewState.fillName(person.await().name)
+                    viewState.fillData(person.await().data)
                 } else {
                     withContext(Dispatchers.Main) { viewState.showSnackbar("There's no players with name $name") }
                 }
@@ -78,14 +78,14 @@ class FragmentPresenterImpl(
 
     override fun onShowButtonWasClicked() {
         CoroutineScope(Dispatchers.Main + job).launch {
-            val players: List<Player>? = withContext(Dispatchers.IO) {
+            val people: List<Person>? = withContext(Dispatchers.IO) {
                 repository.getAllPlayers()
             }
-            if (!players.isNullOrEmpty()) {
+            if (!people.isNullOrEmpty()) {
                 withContext(Dispatchers.Main) { viewState.showSnackbar("show all") }
                 var names = ""
                 var data = ""
-                for (pl in players) {
+                for (pl in people) {
                     names += (" " + pl.name)
                     data += (" " + pl.data)
                 }
@@ -120,7 +120,7 @@ class FragmentPresenterImpl(
             viewState.showSnackbar("Данные не пришли!")
         }
 
-        return CloudPlayer(Player("Пусто", "Пусто"))
+        return CloudPlayer(Person("Пусто", "Пусто"))
     }
 
     override fun onDestroy() {

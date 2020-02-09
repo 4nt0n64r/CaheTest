@@ -1,5 +1,6 @@
 package com.a4nt0n64r.cahetest.ui.base
 
+import com.a4nt0n64r.cahetest.domain.model.Person
 import moxy.MvpPresenter
 
 
@@ -17,7 +18,7 @@ interface FragmentPresenter {
     fun onDeleteButtonWasClicked(name: String)
     fun onFindButtonWasClicked(name: String)
     fun onShowButtonWasClicked()
-    fun onSaveButtonWasClicked(name: String, data: String)
+    fun onSaveButtonWasClicked(person: Person)
 
     fun onNetButtonWasClicked()
 

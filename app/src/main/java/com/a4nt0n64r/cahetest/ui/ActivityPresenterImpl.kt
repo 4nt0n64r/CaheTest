@@ -8,10 +8,6 @@ import moxy.InjectViewState
 class ActivityPresenterImpl : AbstractActivityPresenter() {
 
     override fun loadFragment(fragmentId: Int) {
-        viewState.changeFragment(fragmentId)
-    }
-
-    companion object {
-        val TAG = "ActivityPresenterImpl"
+        viewState.showFragment(fragmentId)
     }
 }

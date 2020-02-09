@@ -12,5 +12,4 @@ class NetworkRepoImpl(private val apiService: ApiService) : NetworkRepository {
         val call = apiService.getPlayerFromCloud()
         return call.execute().body()
     }
-
 }

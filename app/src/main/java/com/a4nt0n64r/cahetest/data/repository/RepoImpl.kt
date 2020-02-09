@@ -1,7 +1,7 @@
 package com.a4nt0n64r.cahetest.data.repository
 
 import com.a4nt0n64r.cahetest.data.source.db.PlayerDao
-import com.a4nt0n64r.cahetest.domain.model.Player
+import com.a4nt0n64r.cahetest.domain.model.Person
 import com.a4nt0n64r.cahetest.domain.repository.Repository
 
 class RepoImpl(private val dao: PlayerDao) : Repository {
@@ -10,15 +10,15 @@ class RepoImpl(private val dao: PlayerDao) : Repository {
         dao.deleteByName(name)
     }
 
-    override suspend fun findPlayer(name: String): Player {
+    override suspend fun findPlayer(name: String): Person {
         return dao.findByName(name)
     }
 
-    override suspend fun getAllPlayers(): List<Player> {
+    override suspend fun getAllPlayers(): List<Person> {
         return dao.selectAll()
     }
 
-    override suspend fun savePlayer(player: Player) {
-        dao.savePlayer(player)
+    override suspend fun savePlayer(person: Person) {
+        dao.savePlayer(person)
     }
 }
